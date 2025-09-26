@@ -9,4 +9,7 @@ const rl = readLine.createInterface({
     output: process.stdout
 })
 
-rl.question
+rl.question("Please enter your name:", (name)=> {
+    console.log(`you entered ${name}`)
+    rl.close()
+})
