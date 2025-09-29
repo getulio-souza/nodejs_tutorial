@@ -13,3 +13,8 @@ rl.question("Please enter your name:", (name)=> {
     console.log(`you entered ${name}`)
     rl.close()
 })
+
+rl.on('close', ()=> {
+    console.log('interface closed')
+    process.exit(0)
+})
