@@ -1,2 +1,5 @@
-data read from input.txt: text 
-Date created Mon Sep 29 2025 10:29:33 GMT-0300 (Horário Padrão de Brasília)
+text 
+ 
+ the content of this file will be appended to the content of input.txt and will be written in output.txt 
+
+ Thu Oct 09 2025 20:46:13 GMT-0300 (Horário Padrão de Brasília)
