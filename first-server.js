@@ -5,7 +5,9 @@ const http = require('http')
 
 //create a server - the callback is always executed everytime a request hits the server
 const server = http.createServer((request, response) => {
-  console.log('a new request received:', request)
+  response.end('hello from the server')
+  console.log('a new request received')
+  console.log(response)
 })
 
 // start the server
