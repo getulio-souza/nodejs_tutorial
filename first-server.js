@@ -7,6 +7,10 @@ const http = require('http')
 //reading the template
 const html = fs.readFileSync('./template/index.html', 'utf-8')
 
+//creating an approch to read the json data only once and turn the data into a object
+let products = JSON.parse(fs.readFileSync('./data/products.json', 'utf-8'))
+
+
 //create a server - the callback is always executed everytime a request hits the server
 const server = http.createServer((request, response) => {
   let path = request.url.toLowerCase();
@@ -31,8 +35,12 @@ const server = http.createServer((request, response) => {
       break;
     
     case '/products':
-      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
-      response.end(html.replace('{{%CONTENT%}}', 'You are in the products page'));
+
+      response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      response.end('you are in the products page')
+      console.log('JSON de produtos:', products)
+
+      // response.end(html.replace('{{%CONTENT%}}', 'You are in the products page'));
       break;
 
     default:
