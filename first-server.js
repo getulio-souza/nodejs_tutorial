@@ -10,6 +10,20 @@ const html = fs.readFileSync('./template/index.html', 'utf-8')
 //creating an approch to read the json data only once and turn the data into a object
 let products = JSON.parse(fs.readFileSync('./data/products.json', 'utf-8'))
 
+let productListHtml = fs.readFileSync('./template/products-list.html', 'utf-8')
+
+let productsHtmlArray = products.map((item)=> {
+  let output = productListHtml.replace('{{%IMAGE%}}', item.productImage);
+  output = output.replace('{{%NAME%}}', item.productName)
+  output = output.replace('{{%MODELNAME%}}', item.modeName)
+  output = output.replace('{{%MODELNO%}}', item.modelNumber)
+  output = output.replace('{{%SIZE%}}', item.size)
+  output = output.replace('{{%CAMERA%}}', item.camera)
+  output = output.replace('{{%PRICE%}}', item.price)
+  output = output.replace('{{%COLOR%}}', item.color)
+
+  return output;
+})
 
 //create a server - the callback is always executed everytime a request hits the server
 const server = http.createServer((request, response) => {
@@ -36,11 +50,10 @@ const server = http.createServer((request, response) => {
     
     case '/products':
 
-      response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-      response.end('you are in the products page')
-      console.log('JSON de produtos:', products)
-
-      // response.end(html.replace('{{%CONTENT%}}', 'You are in the products page'));
+      let productResponseHTML = html.replace('{{%CONTENT%}}', productsHtmlArray.join(','))
+      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      response.end(productResponseHTML);
+      // console.log('JSON de produtos:', productsHtmlArray.join(','))
       break;
 
     default:
