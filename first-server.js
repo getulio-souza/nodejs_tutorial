@@ -3,12 +3,44 @@ const fs = require('fs')
 
 const http = require('http')
 
+
+//reading the template
+const html = fs.readFileSync('./template/index.html', 'utf-8')
+
 //create a server - the callback is always executed everytime a request hits the server
 const server = http.createServer((request, response) => {
-  response.end('hello from the server')
-  console.log('a new request received')
-  console.log(response)
-})
+  let path = request.url.toLowerCase();
+
+  switch (path) {
+    case '/':
+    case '/home':
+      response.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8'
+      })
+      response.end(html.replace('{{%CONTENT%}}', 'You are in the home page'));
+      break;
+
+    case '/about':
+      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      response.end(html.replace('{{%CONTENT%}}', 'You are in the about page'));
+      break;
+
+    case '/contact':
+      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      response.end(html.replace('{{%CONTENT%}}', 'You are in the contact page'));
+      break;
+    
+    case '/products':
+      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      response.end(html.replace('{{%CONTENT%}}', 'You are in the products page'));
+      break;
+
+    default:
+      response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' })
+      response.end(html.replace('{{%CONTENT%}}', '404 - Page not found'));
+      break;
+  }
+});
 
 // start the server
 server.listen(8000, '127.0.0.1', () => {
