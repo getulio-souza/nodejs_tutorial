@@ -1,7 +1,7 @@
 const readLine = require('readline');
 const fs = require('fs')
-
 const http = require('http')
+const url = require('url')
 
 
 //reading the template
@@ -14,6 +14,7 @@ let productListHtml = fs.readFileSync('./template/products-list.html', 'utf-8')
 
 let productsHtmlArray = products.map((item)=> {
   let output = productListHtml.replace('{{%IMAGE%}}', item.productImage);
+  output = output.replace('{{%ID%}}', item.id)
   output = output.replace('{{%NAME%}}', item.productName)
   output = output.replace('{{%MODELNAME%}}', item.modeName)
   output = output.replace('{{%MODELNO%}}', item.modelNumber)
@@ -27,6 +28,7 @@ let productsHtmlArray = products.map((item)=> {
 
 //create a server - the callback is always executed everytime a request hits the server
 const server = http.createServer((request, response) => {
+  let {query, pathname: path1} = url.parse(request.url, true)
   let path = request.url.toLowerCase();
 
   switch (path) {
@@ -49,12 +51,15 @@ const server = http.createServer((request, response) => {
       break;
     
     case '/products':
-
-      let productResponseHTML = html.replace('{{%CONTENT%}}', productsHtmlArray.join(','))
-      response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
-      response.end(productResponseHTML);
-      // console.log('JSON de produtos:', productsHtmlArray.join(','))
-      break;
+      if (!query.id) {
+        let productResponseHTML = html.replace('{{%CONTENT%}}', productsHtmlArray.join(','))
+        response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+        response.end(productResponseHTML);
+        // console.log('JSON de produtos:', productsHtmlArray.join(','))
+        break;
+      } else {
+        response.end(`this is a produt with id: ${query.id}`)
+      }
 
     default:
       response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' })
