@@ -63,3 +63,5 @@ server.on('request', (req, res)=> {
 })
 
 //pipe method is only avaliable in readble streams.
+
+console.log('nodemon is working')
